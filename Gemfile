@@ -44,5 +44,11 @@ group :development, :test do
 
   # Reading sqlite dataset to populate database
   gem 'sqlite3', '~> 1.3.10'
+
+  # MusicBrainz for song tags
+  gem 'musicbrainz', :git => 'https://github.com/localhots/musicbrainz/'
+
+  # Rest Client for accessing MB directly.
+  gem 'rest-client', :git => 'https://github.com/rest-client/rest-client'
 end
 
