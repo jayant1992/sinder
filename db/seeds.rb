@@ -20,17 +20,17 @@ def getmbtags(row)
   unless recording.blank?
     trackmbid = recording[:id]
 
-    response = RestClient.get "http://musicbrainz.org/ws/2/recording?query=#{row[0]} AND arid:#{row[2]}&fmt=json"
-    case response.code
-    when 200
+    begin
+      response = RestClient.get "http://musicbrainz.org/ws/2/recording?query=#{row[0]} AND arid:#{row[2]}&fmt=json"
+    rescue => e
+      e.response
+    else
       resp_hash = JSON.parse response
       resp_hash["recordings"].each do |resp|
         unless resp["tags"].blank?
           resp["tags"].each {|tag| tags << tag["name"] }
         end
       end
-    else
-      return []
     end
     tags.uniq!
     # MB rate limits
@@ -87,7 +87,6 @@ begin
     puts "Processing #{index} of #{count}."
     tags = getmbtags row
     tags.each { |tag| song.tag << Tag.find_or_create_by(:name => tag) }
-    
   end
 
 rescue SQLite3::Exception => e 
