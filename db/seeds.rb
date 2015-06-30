@@ -11,6 +11,7 @@
 
 require 'musicbrainz'
 require 'rest-client'
+require 'uri'
 
 def getmbtags(row)
 
@@ -21,7 +22,8 @@ def getmbtags(row)
     trackmbid = recording[:id]
 
     begin
-      response = RestClient.get "http://musicbrainz.org/ws/2/recording?query=#{row[0]} AND arid:#{row[2]}&fmt=json"
+      enc_uri = URI.escape("http://musicbrainz.org/ws/2/recording?query=#{row[0]} AND arid:#{row[2]}&fmt=json")      
+      response = RestClient.get enc_uri
     rescue => e
       e.response
     else
@@ -82,11 +84,13 @@ begin
       releases[row[3]] = release
     end
 
-    song = artist.songs.find_or_create_by title: row[0], release_id: release.id, year: row[4]
+    unless artist.songs.find_by title: row[0], release_id: release.id, year: row[4]
+      tags = getmbtags row
+      song = artist.songs.create title: row[0], release_id: release.id, year: row[4]
+      tags.each { |tag| song.tag << Tag.find_or_create_by(:name => tag) } unless tags.nil?
+    end
 
     puts "Processing #{index} of #{count}."
-    tags = getmbtags row
-    tags.each { |tag| song.tag << Tag.find_or_create_by(:name => tag) }
   end
 
 rescue SQLite3::Exception => e 
