@@ -12,6 +12,60 @@
 require 'musicbrainz'
 require 'rest-client'
 require 'uri'
+require 'google/api_client'
+require 'trollop'
+
+YT_DEVELOPER_KEY = 'AIzaSyCV-QNALLK-RdVuhk9a-gSCZVU3qCRvxbM'
+YOUTUBE_API_SERVICE_NAME = 'youtube'
+YOUTUBE_API_VERSION = 'v3'
+
+def get_service
+  client = Google::APIClient.new(
+    :key => YT_DEVELOPER_KEY,
+    :authorization => nil,
+    :application_name => 'Sinder',
+    :application_version => '1.0.0'
+  )
+  youtube = client.discovered_api(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION)
+
+  return client, youtube
+end
+
+def add_yt_id(row)
+  opts = Trollop::options do
+    opt :q, 'Search term', :type => String, :default => "#{row[0]} #{row[1]}"
+    opt :max_results, 'Max Results', :type => :int, :default => 1
+  end
+
+  client, youtube = get_service
+
+  begin
+    # Call the search.list method to retrieve results matching the specified
+    # query term.
+    search_response = client.execute!(
+      :api_method => youtube.search.list,
+      :parameters => {
+        :part => 'snippet',
+        :q => opts[:q],
+        :maxResults => opts[:max_results]
+      }
+    )
+
+    vid = nil
+    items = search_response.data.items
+    unless items.length==0
+      result = search_response.data.items.first.id
+      if result.kind=="youtube#video"
+        vid =  result.videoId
+      end
+    end
+    return vid
+
+  rescue Google::APIClient::TransmissionError => e
+    puts e.result.body
+  end
+end
+
 
 def getmbtags(row)
 
@@ -88,7 +142,13 @@ begin
       tags = getmbtags row
       song = artist.songs.create title: row[0], release_id: release.id, year: row[4]
       tags.each { |tag| song.tag << Tag.find_or_create_by(:name => tag) } unless tags.nil?
+    else
+      song = artist.songs.find_by title: row[0], release_id: release.id, year: row[4]
     end
+
+    yid ||= add_yt_id row
+    song.update(youtube_id: yid) unless yid.nil?
+    song.save!
 
     puts "Processing #{index} of #{count}."
   end

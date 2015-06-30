@@ -52,5 +52,9 @@ group :development, :test do
 
   # Rest Client for accessing MB directly.
   gem 'rest-client', :git => 'https://github.com/rest-client/rest-client'
+
+  # Google API
+  gem 'google-api-client', '>0.7'
+  gem 'trollop'
 end
 
