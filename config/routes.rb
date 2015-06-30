@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   # get 'welcome/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -6,6 +7,11 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  get 'recommendation' => 'recommendation#index'
+  get 'next_recommendation' => 'recommendation#next_recommendation'
+  get 'previous_recommendation' => 'recommendation#previous_recommendation'
+  get 'releases' => 'releases#index'
+  get 'all_releases' => 'releases#get_all_releases'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
