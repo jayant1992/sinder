@@ -52,6 +52,21 @@ ActiveRecord::Schema.define(version: 20150701062146) do
     t.integer "tag_id",  null: false
   end
 
+  create_table "songs_users_dislikes", force: :cascade do |t|
+    t.integer "song_id", null: false
+    t.integer "user_id", null: false
+  end
+
+  create_table "songs_users_likes", id: false, force: :cascade do |t|
+    t.integer "song_id", null: false
+    t.integer "user_id", null: false
+  end
+
+  create_table "songs_users_neutral", force: :cascade do |t|
+    t.integer "song_id", null: false
+    t.integer "user_id", null: false
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -61,12 +76,20 @@ ActiveRecord::Schema.define(version: 20150701062146) do
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
+<<<<<<< HEAD
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
     t.string   "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+=======
+    t.string   "name"
+    t.string   "facebook_id"
+    t.string   "email"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+>>>>>>> users_and_songs_preferences
   end
 
   add_foreign_key "songs", "artists"
