@@ -4,19 +4,17 @@ class SongsController < ApplicationController
 
     def get_all_songs
         all_songs = Song.all
-        all_songs
+        all_songs.to_json
     end
 
     def get_song_by_id
-        id = params[:id]
-        song = Song.find(id)
-        song
+        song = Song.find(id:params[:id])
+        song.to_json
     end
 
     def get_song_by_year
-        year = params[:year]
-        song = Song.find_by(name:year)
-        song
+        song = Song.find_by(year:params[:year])
+        song.to_json
     end
 
 end

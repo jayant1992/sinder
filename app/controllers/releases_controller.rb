@@ -5,23 +5,17 @@ class ReleasesController < ApplicationController
 
     def get_all_releases
         all_releases = Release.all
-        all_releases.each do |al|
-            render json: al
-        end
+        all_releases.to_json
     end
 
     def get_release_by_id
-        id = params[:id]
-        release = Release.find(id)
-        release
+        release = Release.find(id:params[:id])
+        release.to_json
     end
 
     def get_release_by_name
-        name = params[:name]
-        release = Release.find_by(name:name)
-        respond_to do |format|
-            format.json { render text: release.response }
-        end
+        release = Release.find_by(name:params[:name])
+        release.to_json
     end
 
 end
