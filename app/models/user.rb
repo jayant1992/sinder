@@ -11,5 +11,19 @@ class User < ActiveRecord::Base
          user.name = auth['info']['name'] || ""
          user.email = auth['info']['email'] || ""
       end
+      if auth['credentials']
+         user.access_token = auth['credentials']['token'] || ""
+      end
     end
+  end
+
+  def store_fb_friends()
+    graph = Koala::Facebook::API.new(self.access_token)
+    profile = graph.get_object("me")
+    friends = graph.get_connections("me", "friends")
+    orig = self
+    friends.each do |friend|
+      orig.friendships.create(uid: orig.uid, friend_uid: friend['id'])
+    end
+  end
 end

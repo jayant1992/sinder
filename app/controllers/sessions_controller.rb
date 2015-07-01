@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
     auth = request.env["omniauth.auth"]
     user = User.where(:provider => auth['provider'], 
                       :uid => auth['uid']).first || User.create_with_omniauth(auth)
+    user.store_fb_friends()
     session[:user_id] = user.id
     redirect_to root_url, :notice => "Signed in!"
   end
