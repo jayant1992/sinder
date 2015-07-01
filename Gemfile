@@ -65,5 +65,6 @@ group :development, :test do
 
   # Data Dump
   gem 'yaml_db'
+  gem 'seed_dump'
 end
 
