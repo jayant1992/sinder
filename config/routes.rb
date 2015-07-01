@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   #   end
 
   # Example resource route with concerns:
-  #   concern :toggleable do
+  #   concern :toggleable doq
   #     post 'toggle'
   #   end
   #   resources :posts, concerns: :toggleable
@@ -63,4 +63,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  namespace :api do
+    resources :songs, :artists, { format: 'json' }
+  end
 end
