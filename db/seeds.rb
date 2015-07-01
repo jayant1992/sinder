@@ -146,9 +146,11 @@ begin
       song = artist.songs.find_by title: row[0], release_id: release.id, year: row[4]
     end
 
-    yid ||= add_yt_id row
-    song.update(youtube_id: yid) unless yid.nil?
-    song.save!
+    if song.youtube_id.nil?
+      yid = add_yt_id row
+      song.update(youtube_id: yid) unless yid.nil?
+      song.save!
+    end
 
     puts "Processing #{index} of #{count}."
   end
