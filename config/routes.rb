@@ -1,15 +1,20 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
 
-  get 'welcome/login'
-
-  # get 'welcome/index'
+  #Concerns
+  concern :searchable do
+    collection do
+      get :search
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+
+  get 'welcome/index'
+  get 'welcome/login'
 
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signout' => 'sessions#destroy'
@@ -64,6 +69,6 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   namespace :api do
-    resources :songs, :artists, :only => [:index, :show], :defaults => { :format => 'json' }
+    resources :songs, :artists, :tags, :only => [:index, :show ], concerns: :searchable, :defaults => { :format => 'json' }
   end
 end
