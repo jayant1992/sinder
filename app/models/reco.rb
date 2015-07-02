@@ -11,7 +11,7 @@ module Reco
                 reco[song_id] += w
             end
         end
-        puts reco
+        reco
     end
 
     def dislike_recommendations
@@ -25,7 +25,7 @@ module Reco
                 reco[song_id] += w
             end
         end
-        puts reco
+        reco
     end
 
     def neutral_recommendations
@@ -39,7 +39,17 @@ module Reco
                 reco[song_id] += w
             end
         end
-        puts reco
+        reco
+    end
+
+    def genre_recommendations
+    end
+
+    def artist_recommendations
+    end
+
+    def recommendations
+        like_recommendations.update(dislike_recommendations) { |k, v1, v2| v1 - 2*v2 }.update(neutral_recommendations) { |k, v1, v2| v1 + v2 }
     end
 
 end
