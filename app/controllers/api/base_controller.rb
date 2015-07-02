@@ -88,11 +88,16 @@ module Api
       respond_with get_resource
     end
 
-    # GET /api/search/{plural_resource_name}?q=<query_string>
+    # GET /api/{plural_resource_name}/search?q=<query_string>
     def search
       render json: resource_class.search(params[:q]).response.hits.to_json
     end
 
+    # GET /api/search?q=<query_string>
+    def search_all
+      render json: Elasticsearch::Model.search(params[:q]).response.hits.to_json
+    end
+    
     # PATCH/PUT /api/{plural_resource_name}/1
     def update
       if get_resource.update(resource_params)

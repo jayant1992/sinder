@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   namespace :api do
+    get '/search' => 'base#search_all'
     resources :songs, :artists, :tags, :only => [:index, :show ], concerns: :searchable, :defaults => { :format => 'json' }
   end
 end
