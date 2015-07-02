@@ -1,5 +1,4 @@
 class Tag < ActiveRecord::Base
-	include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+	include Searchable
   has_and_belongs_to_many :song
 end

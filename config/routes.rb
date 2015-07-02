@@ -64,6 +64,6 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   namespace :api do
-    resources :songs, :artists, { format: 'json' }
+    resources :songs, :artists, :only => [:index, :show], :defaults => { :format => 'json' }
   end
 end
