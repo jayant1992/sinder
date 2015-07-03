@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701133203) do
+ActiveRecord::Schema.define(version: 20150701082642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,11 @@ ActiveRecord::Schema.define(version: 20150701133203) do
     t.text     "mb_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "friendships", id: false, force: :cascade do |t|
+    t.string "uid"
+    t.string "friend_uid"
   end
 
   create_table "releases", force: :cascade do |t|
@@ -36,6 +41,7 @@ ActiveRecord::Schema.define(version: 20150701133203) do
     t.integer  "release_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "youtube_id"
   end
 
   add_index "songs", ["artist_id"], name: "index_songs_on_artist_id", using: :btree
@@ -46,12 +52,7 @@ ActiveRecord::Schema.define(version: 20150701133203) do
     t.integer "tag_id",  null: false
   end
 
-  create_table "songs_users", id: false, force: :cascade do |t|
-    t.integer "song_id", null: false
-    t.integer "user_id", null: false
-  end
-
-  create_table "songs_users_dislikes", force: :cascade do |t|
+  create_table "songs_users_dislikes", id: false, force: :cascade do |t|
     t.integer "song_id", null: false
     t.integer "user_id", null: false
   end
@@ -61,7 +62,7 @@ ActiveRecord::Schema.define(version: 20150701133203) do
     t.integer "user_id", null: false
   end
 
-  create_table "songs_users_neutral", force: :cascade do |t|
+  create_table "songs_users_neutral", id: false, force: :cascade do |t|
     t.integer "song_id", null: false
     t.integer "user_id", null: false
   end
@@ -75,11 +76,13 @@ ActiveRecord::Schema.define(version: 20150701133203) do
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
+    t.string   "provider"
+    t.string   "uid"
     t.string   "name"
-    t.string   "facebook_id"
     t.string   "email"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "access_token"
   end
 
   add_foreign_key "songs", "artists"

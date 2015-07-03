@@ -11,8 +11,11 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+
+#Elastic Search
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -22,7 +25,12 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
+#FB Login
+gem 'omniauth-facebook'
+#FB API
+gem "koala", "~> 2.0"
+# Responder
+gem 'responders', '~> 2.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -44,5 +52,21 @@ group :development, :test do
 
   # Reading sqlite dataset to populate database
   gem 'sqlite3', '~> 1.3.10'
+
+  # MusicBrainz for song tags
+  gem 'musicbrainz', :git => 'https://github.com/localhots/musicbrainz/'
+
+  # Rest Client for accessing MB directly.
+  gem 'rest-client', :git => 'https://github.com/rest-client/rest-client'
+
+  # Google API
+  gem 'google-api-client', '>0.7'
+  gem 'trollop'
+
+  # Pagination
+  gem 'kaminari'
+
+  # Data Dump
+  gem 'yaml_db'
 end
 

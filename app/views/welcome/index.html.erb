@@ -1,2 +1,8 @@
 <h1>Welcome#index</h1>
 <%= link_to "Recommendation",   recommendation_path %>
+<p>Find me in app/views/welcome/index.html.erb</p>
+<ul>
+    <% flash.each do |key, msg| %>
+        <%= content_tag :li, msg, id: key %>
+    <% end %>
+</ul>

@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  # get 'welcome/index'
+  #Concerns
+  concern :searchable do
+    collection do
+      get :search
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -12,6 +17,13 @@ Rails.application.routes.draw do
   get 'previous_recommendation' => 'recommendation#previous_recommendation'
   get 'releases' => 'releases#index'
   get 'all_releases' => 'releases#get_all_releases'
+
+  get 'welcome/index'
+  get 'welcome/login'
+
+  get '/auth/:provider/callback' => 'sessions#create'
+  get '/signout' => 'sessions#destroy'
+  get '/signin' => 'sessions#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -49,7 +61,7 @@ Rails.application.routes.draw do
   #   end
 
   # Example resource route with concerns:
-  #   concern :toggleable do
+  #   concern :toggleable doq
   #     post 'toggle'
   #   end
   #   resources :posts, concerns: :toggleable
@@ -61,4 +73,8 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  namespace :api do
+    get '/search' => 'base#search_all'
+    resources :songs, :artists, :tags, :only => [:index, :show ], concerns: :searchable, :defaults => { :format => 'json' }
+  end
 end
